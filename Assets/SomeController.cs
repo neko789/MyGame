@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SomeController : MonoBehaviour
 {
-    Animator animator;
+    Animation anima;
     private float ground = -3.5f;
     private Vector2 posi;
     Rigidbody2D ri2d;
     private int goal;
     void Start()
     {
-        this.animator = GetComponent<Animator>();
+        this.anima = this.gameObject.GetComponent<Animation>();
         this.ri2d = GetComponent<Rigidbody2D>();
         goal = 0;
     }
@@ -19,11 +19,11 @@ public class SomeController : MonoBehaviour
     void Update()
     {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        bool isGround = (transform.position.y > this.ground) ? false : true;
-        this.animator.SetBool("isGround", isGround);
+    
 
         if (Input.GetMouseButtonDown(0))
         {
+            
             if (pos.x >= this.transform.position.x && transform.localScale.x < 0)
             {
                 //this.animator.SetFloat("Horizontal", 1);
