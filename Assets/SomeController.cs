@@ -8,13 +8,12 @@ public class SomeController : MonoBehaviour
     private float ground = -3.5f;
     private Vector2 posi;
     Rigidbody2D ri2d;
-    private bool goal;
-    private float m;
+    private int goal;
     void Start()
     {
         this.animator = GetComponent<Animator>();
         this.ri2d = GetComponent<Rigidbody2D>();
-        m = 1;
+        goal = 0;
     }
 
     void Update()
@@ -25,36 +24,34 @@ public class SomeController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            m = m*1.8f;
             if (pos.x >= this.transform.position.x && transform.localScale.x < 0)
             {
                 //this.animator.SetFloat("Horizontal", 1);
                 SwitchScale();
+                goal = 1;
+                ri2d.AddForce(Vector2.right * 300f);
             }
-            else if (pos.x < this.transform.position.x && transform.localScale.x > 0)
+            else if (pos.x <= this.transform.position.x && transform.localScale.x > 0)
             {
                 //this.animator.SetFloat("Horizontal", -1);
                 SwitchScale();
+                goal = -1;
+                ri2d.AddForce(Vector2.left * 300f);
             }
             posi = pos;
-            goal = true;
         }
     }
     void FixedUpdate()
     {
-        if (goal)
+        if (posi.x > this.transform.position.x && goal > 0)
         {
-            if (posi.x > this.transform.position.x)
-            {
-                GetComponent<Rigidbody2D>().velocity = Vector2.right * m;
-                goal = false;
-            }
-            else if (posi.x < this.transform.position.x)
-            {
-                GetComponent<Rigidbody2D>().velocity = Vector2.left * m;
-                goal = false;
+            ri2d.AddForce(Vector2.right * 40f);
 
-            }
+        }
+        else if (posi.x < this.transform.position.x && goal < 0)
+        {
+            ri2d.AddForce(Vector2.left * 40f);
+
         }
     }
     void SwitchScale()
@@ -62,6 +59,5 @@ public class SomeController : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x = -1 * scale.x;
         transform.localScale = scale;
-        m = 1;
     }
 }
